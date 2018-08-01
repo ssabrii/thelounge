@@ -44,6 +44,7 @@ class Msg {
 
 		return this.type !== Msg.Type.MOTD &&
 			this.type !== Msg.Type.ERROR &&
+			this.type !== Msg.Type.MODE_CHANNEL &&
 			this.type !== Msg.Type.BANLIST &&
 			this.type !== Msg.Type.IGNORELIST &&
 			this.type !== "channel_list" &&
@@ -65,6 +66,7 @@ Msg.Type = {
 	KICK: "kick",
 	MESSAGE: "message",
 	MODE: "mode",
+	MODE_CHANNEL: "mode_channel",
 	MOTD: "motd",
 	NICK: "nick",
 	NOTICE: "notice",

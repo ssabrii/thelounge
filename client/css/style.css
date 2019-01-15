@@ -55,6 +55,7 @@ body {
 	user-select: none;
 	cursor: default;
 	touch-action: none;
+	scrollbar-width: thin;
 
 	/**
 	  * Disable pull-to-refresh on mobile that conflicts with scrolling the message list.

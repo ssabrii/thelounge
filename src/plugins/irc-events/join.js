@@ -29,6 +29,12 @@ module.exports = function(irc, network) {
 			network.irc.raw("MODE", chan.name);
 		} else if (data.nick === irc.user.nick) {
 			chan.state = Chan.State.JOINED;
+
+			if (network.irc.network.cap.isEnabled("znc.in/playback")) {
+				const from = chan.messages.length > 0 ? chan.messages[chan.messages.length - 1].time.getTime() / 1000 : 0;
+
+				chan.requestZncPlayback(network, from);
+			}
 		}
 
 		const user = new User({nick: data.nick});

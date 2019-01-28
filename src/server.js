@@ -181,6 +181,11 @@ module.exports = function() {
 				return;
 			}
 
+			log.info("Exiting...");
+
+			// Close all client and IRC connections
+			manager.clients.forEach((client) => client.quit());
+
 			if (Helper.config.prefetchStorage) {
 				log.info("Clearing prefetch storage folder, this might take a while...");
 
@@ -189,11 +194,6 @@ module.exports = function() {
 
 			// Forcefully exit after 3 seconds
 			suicideTimeout = setTimeout(() => process.exit(1), 3000);
-
-			log.info("Exiting...");
-
-			// Close all client and IRC connections
-			manager.clients.forEach((client) => client.quit());
 
 			// Close http server
 			server.close(() => {
@@ -226,7 +226,7 @@ function getClientLanguage(socket) {
 }
 
 function getClientIp(socket) {
-	let ip = socket.handshake.address;
+	let ip = socket.handshake.address || "127.0.0.1";
 
 	if (Helper.config.reverseProxy) {
 		const forwarded = (socket.request.headers["x-forwarded-for"] || "").split(/\s*,\s*/).filter(Boolean);
@@ -491,6 +491,10 @@ function initializeClient(socket, client, token, lastMessage) {
 	if (!Helper.config.public) {
 		socket.on("setting:set", (newSetting) => {
 			if (!newSetting || typeof newSetting !== "object") {
+				return;
+			}
+
+			if (typeof newSetting.value === "object" || typeof newSetting.name !== "string" || newSetting.name[0] === "_") {
 				return;
 			}
 

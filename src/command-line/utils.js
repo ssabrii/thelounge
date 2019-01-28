@@ -107,29 +107,29 @@ class Utils {
 		return memo;
 	}
 
-	static executeYarnCommand(...parameters) {
-		// First off, try to find yarn inside of The Lounge
-		let yarn = path.join(
-			__dirname, "..", "..", "node_modules",
-			"yarn", "bin", "yarn.js"
-		);
+	static executeYarnCommand(command, ...parameters) {
+		const yarn = require.resolve("yarn/bin/yarn.js");
+		const packagesPath = Helper.getPackagesPath();
+		const cachePath = path.join(packagesPath, "package_manager_cache");
 
-		if (!fs.existsSync(yarn)) {
-			// Now try to find yarn in the same parent folder as The Lounge (flat install)
-			yarn = path.join(
-				__dirname, "..", "..", "..",
-				"yarn", "bin", "yarn.js"
-			);
-
-			if (!fs.existsSync(yarn)) {
-				// Fallback to global installation
-				yarn = "yarn";
-			}
-		}
+		const staticParameters = [
+			"--cache-folder",
+			cachePath,
+			"--cwd",
+			packagesPath,
+			"--json",
+			"--ignore-scripts",
+			"--non-interactive",
+		];
 
 		return new Promise((resolve, reject) => {
 			let success = false;
-			const add = require("child_process").spawn(process.execPath, [yarn, ...parameters]);
+			const add = require("child_process").spawn(process.execPath, [
+				yarn,
+				command,
+				...staticParameters,
+				...parameters,
+			]);
 
 			add.stdout.on("data", (data) => {
 				data.toString().trim().split("\n").forEach((line) => {

@@ -15,7 +15,6 @@ require("./part");
 require("./quit");
 require("./sync_sort");
 require("./topic");
-require("./uploads");
 require("./users");
 require("./sign_out");
 require("./sessions_list");

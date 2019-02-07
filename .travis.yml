@@ -29,7 +29,7 @@ before_script:
   - NODE_ENV=$BUILD_ENV yarn build
 
 install:
-  - yarn --frozen-lockfile --non-interactive --network-timeout 300000
+  - yarn --pure-lockfile --link-duplicates --ignore-engines --non-interactive --network-timeout 300000
 
 notifications:
   email:

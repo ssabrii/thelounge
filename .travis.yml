@@ -16,6 +16,7 @@ matrix:
     - node_js: 10
       os: windows
       env: YARN_GPG=no # starts gpg-agent that never exits
+      cache: false
     - node_js: 10
       os: osx
     - name: "Production build"
